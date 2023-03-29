@@ -4,6 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 public class ControleDeAtividades {
   Scanner sc = new Scanner(System.in);
+  List<Atividade> atividades = new ArrayList<Atividade>();
+
+  public boolean cadastro(){
+    return true; //Temporário
+  }
+
+  public boolean pesquisar(){
+    return true; //Temporário
+  }
+
+  public boolean atualizar(){
+    return true; //Temporário
+  }
+
+  public boolean remover(){
+    return true; //Temporário
+  }
+
+  public boolean testar(){
+    return true; //Temporário
+  }
+  
   public void inicia() {
     boolean controle = true;
     while(controle) {
