@@ -1,3 +1,4 @@
+package atividades;
 
 public class AvTrabalho extends Atividade {
   int dificuldade;
@@ -30,6 +31,11 @@ public class AvTrabalho extends Atividade {
             "Insira a dificuldade da atividade \nFácil (1)\nMédia (2)\nDifícil (3)\n\nInsira o número correspondente: ");
       }
     }
+  }
+
+  @Override
+  public String mostraAtividade() {
+    return super.mostraAtividade() + String.format("Dificuldade: %d", dificuldade);
   }
 
   public double gastoDeEnergia() {

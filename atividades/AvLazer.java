@@ -1,3 +1,4 @@
+package atividades;
 
 public class AvLazer extends Atividade {
 

@@ -1,9 +1,14 @@
 import java.util.List;
 
-import lib.Helpers;
+import atividades.Atividade;
+import atividades.AvFisica;
+import atividades.AvLazer;
+import atividades.AvTrabalho;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import lib.Helpers;
 
 public class ControleDeAtividades {
   List<Atividade> atividades = new ArrayList<Atividade>();
@@ -47,7 +52,7 @@ public class ControleDeAtividades {
 
   public boolean testar() {
     for (Atividade a : atividades) {
-      System.out.println(a.descricao);
+      System.out.println(a.mostraAtividade());
     }
     return true; // Temporário
   }

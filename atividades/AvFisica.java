@@ -1,3 +1,5 @@
+package atividades;
+
 public class AvFisica extends Atividade {
   int intensidade;
 
@@ -29,6 +31,11 @@ public class AvFisica extends Atividade {
             "Insira a intensidade da atividade \nFraco (2)\nIntenso (3)\nVigoroso (4)\n\nInsira o número correspondente: ");
       }
     }
+  }
+
+  @Override
+  public String mostraAtividade() {
+    return super.mostraAtividade() + String.format("Intensidade: %d", intensidade);
   }
 
   public double gastoDeEnergia() {
