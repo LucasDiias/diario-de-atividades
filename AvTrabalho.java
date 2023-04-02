@@ -1,3 +1,4 @@
+
 public class AvTrabalho extends Atividade {
   int dificuldade;
 

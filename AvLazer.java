@@ -1,3 +1,4 @@
+
 public class AvLazer extends Atividade {
 
   public AvLazer(String duracao, String satisfacao, String descricao, String data) {

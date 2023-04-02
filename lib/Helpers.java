@@ -1,3 +1,5 @@
+package lib;
+
 import java.util.Scanner;
 
 public class Helpers {

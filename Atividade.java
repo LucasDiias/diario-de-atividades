@@ -1,6 +1,8 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import lib.Helpers;
+
 public abstract class Atividade {
   double duracao;
   int satisfacao;
@@ -95,6 +97,12 @@ public abstract class Atividade {
   }
 
   public abstract double gastoDeEnergia();
+
+  public String mostraAtividade() {
+    return String.format("\nDescrição: %s\nData: %s\nDuração: %.2f minutos\nSatisfação: %s\nGasto de energia: %.2f",
+        getDescricao(), getData(), getDuracao(), getSatisfacao() == 1 ? "Satisfeito" : "Insatisfeito",
+        gastoDeEnergia());
+  }
 
   public double bemEstar() {
     return gastoDeEnergia() * satisfacao / 360;
