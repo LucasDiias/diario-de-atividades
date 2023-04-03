@@ -35,7 +35,58 @@ public class AvFisica extends Atividade {
 
   @Override
   public String mostraAtividade() {
-    return super.mostraAtividade() + String.format("Intensidade: %d", intensidade);
+    return super.mostraAtividade() + String.format("\nIntensidade: %d", intensidade);
+  }
+
+  //
+  @Override
+  public void atualizaAtividade() {
+    helper.clear();
+    mostraAtividade();
+
+    System.out.println("O que deseja atualizar?");
+    System.out.println("1 - Descrição");
+    System.out.println("2 - Data");
+    System.out.println("3 - Duração");
+    System.out.println("4 - Satisfação");
+    System.out.println("5 - Intensidade");
+    System.out.println("6 - Voltar");
+    int opcao;
+    while (true) {
+      try {
+        opcao = Integer.parseInt(helper.input("\nOpção: "));
+        if (opcao < 1 || opcao > 6) {
+          throw new Exception();
+        }
+        break;
+      } catch (Exception e) {
+        helper.clear();
+        System.err.println("Insira uma opção válida");
+      }
+    }
+    switch (opcao) {
+      case 1:
+        setDescricao(helper.input("Insira uma nova descrição: "));
+        break;
+      case 2:
+        setData(helper.input("Insira uma nova data (dd/mm/aaaa): "));
+        break;
+      case 3:
+        setDuracao(helper.input("Insira uma nova duração (em minutos): "));
+        break;
+      case 4:
+        setSatisfacao(helper.input("Insira uma nova satisfação: "));
+        break;
+      case 5:
+        setIntensidade(helper.input("Insira uma nova intensidade: "));
+        break;
+      case 6:
+        break;
+      default:
+        System.out.println("Opção inválida");
+        atualizaAtividade();
+    }
+    ;
   }
 
   public double gastoDeEnergia() {

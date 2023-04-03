@@ -20,9 +20,15 @@ public class Main {
           varControle = controle.remover();
           break;
         case 5:
-          varControle = controle.testar();
+          varControle = controle.listarAtividades();
           break;
         case 6:
+          varControle = controle.resumo();
+          break;
+        case 7:
+          varControle = controle.testar();
+          break;
+        case 8:
           varControle = false;
           break;
       }
