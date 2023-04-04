@@ -1,8 +1,9 @@
 package atividades;
 
 public class AvFisica extends Atividade {
-  int intensidade;
+  private int intensidade;
 
+  // Construtor da classe AvFisica, inicializa as propriedades
   public AvFisica(String intensidade, String duracao, String satisfacao, String descricao, String data) {
     try {
       setIntensidade(intensidade);
@@ -10,15 +11,25 @@ public class AvFisica extends Atividade {
       setSatisfacao(satisfacao);
       setDescricao(descricao);
       setData(data);
+      setTipo(1);
     } catch (Exception e) {
-      throw new IllegalArgumentException("Não foi possível criar a atividade.");
+      System.err.println("Erro ao criar atividade física.");
     }
   }
 
+  // GETTERS *******************************************************************
+  public int getIntensidade() {
+    return this.intensidade;
+  }
+
+  // SETTERS *******************************************************************
+  // Lógica de tratamento do set de Intensidade
   public void setIntensidade(String intensidade) {
+    // Loop para verificar se a intensidade está no formato correto
     while (true) {
       try {
         int i = Integer.parseInt(intensidade);
+        // Verifica se a intensidade é 2, 3 ou 4
         if (i == 2 || i == 3 || i == 4) {
           this.intensidade = i;
           break;
@@ -33,13 +44,16 @@ public class AvFisica extends Atividade {
     }
   }
 
-  @Override
+  // MÉTODOS *******************************************************************
+  @Override // Override do método mostraAtividade da classe Atividade
   public String mostraAtividade() {
-    return super.mostraAtividade() + String.format("\nIntensidade: %d", intensidade);
+    // Retorna a string formatada com os dados da atividade adicionando a
+    // Intensidade
+    return super.mostraAtividade() + String.format("\nIntensidade: %s",
+        (getIntensidade() == 2 ? "Fraco" : getIntensidade() == 3 ? "Intenso" : "Vigoroso"));
   }
 
-  //
-  @Override
+  @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
     helper.clear();
     mostraAtividade();
@@ -89,6 +103,7 @@ public class AvFisica extends Atividade {
     ;
   }
 
+  // Implementação do método gastoDeEnergia da classe AvFisica
   public double gastoDeEnergia() {
     return duracao * intensidade * 3;
   }

@@ -1,11 +1,14 @@
 public class Main {
   public static void main(String[] args) {
+    // Instancia o controle de atividades
     ControleDeAtividades controle = new ControleDeAtividades();
 
+    // Loop para mostrar o menu principal
     boolean varControle = true;
     while (varControle) {
-      int escolha = controle.mostraMenu();
+      int escolha = controle.mostraMenuPrincipal();
 
+      // Switch para escolher a opção do menu
       switch (escolha) {
         case 1:
           varControle = controle.cadastro();

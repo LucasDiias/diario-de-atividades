@@ -1,9 +1,9 @@
 package atividades;
 
 public class AvTrabalho extends Atividade {
-  int dificuldade;
+  private int dificuldade;
 
-  //
+  // Construtor da classe AvTrabalho, inicializa as propriedades
   public AvTrabalho(String dificuldade, String duracao, String satisfacao, String descricao, String data) {
     try {
       setDificuldade(dificuldade);
@@ -11,17 +11,27 @@ public class AvTrabalho extends Atividade {
       setSatisfacao(satisfacao);
       setDescricao(descricao);
       setData(data);
+      setTipo(3);
     } catch (Exception e) {
-      throw new IllegalArgumentException("Não foi possível criar a atividade.");
+      System.err.println("Erro ao criar atividade de trabalho.");
     }
   }
 
+  // GETTERS *******************************************************************
+  public int getDificuldade() {
+    return this.dificuldade;
+  }
+
+  // SETTERS *******************************************************************
+  // Lógica de tratamento do set de Dificuldade
   public void setDificuldade(String dificuldade) {
+    // Loop para verificar se a dificuldade está no formato correto
     while (true) {
       try {
-        int i = Integer.parseInt(dificuldade);
-        if (i == 1 || i == 2 || i == 3) {
-          this.dificuldade = i;
+        int d = Integer.parseInt(dificuldade);
+        // Verifica se a dificuldade é 1, 2 ou 3
+        if (d == 1 || d == 2 || d == 3) {
+          this.dificuldade = d;
           break;
         } else {
           throw new Exception();
@@ -35,13 +45,14 @@ public class AvTrabalho extends Atividade {
     }
   }
 
-  @Override
+  // MÉTODOS *******************************************************************
+  @Override // Override do método mostraAtividade da classe Atividade
   public String mostraAtividade() {
-    return super.mostraAtividade() + String.format("\nDificuldade: %d", dificuldade);
+    return super.mostraAtividade() + String.format("\nDificuldade: %s",
+        getDificuldade() == 1 ? "Fácil" : getDificuldade() == 2 ? "Média" : "Difícil");
   }
 
-  //
-  @Override
+  @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
     helper.clear();
     mostraAtividade();
@@ -89,6 +100,7 @@ public class AvTrabalho extends Atividade {
     }
   }
 
+  // Implementação do método gastoDeEnergia da classe AvTrabalho
   public double gastoDeEnergia() {
     return duracao * dificuldade * 2;
   }
