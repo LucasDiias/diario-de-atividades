@@ -299,7 +299,7 @@ public class ControleDeAtividades {
 
     // Adiciona as atividades que possuem a descrição inserida na lista
     for (Atividade atividade : atividades) {
-      if (atividade.getDescricao().equals(descricao)) {
+      if (atividade.getDescricao().toUpperCase().equals(descricao.toUpperCase())) {
         atividadesMostrar.add(atividade);
       }
     }
