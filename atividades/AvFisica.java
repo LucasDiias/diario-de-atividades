@@ -1,5 +1,7 @@
 package atividades;
 
+import lib.Helpers;
+
 public class AvFisica extends Atividade {
   private int intensidade;
 
@@ -38,7 +40,7 @@ public class AvFisica extends Atividade {
         }
       } catch (Exception e) {
         System.err.println("Insira uma intensidade válida");
-        intensidade = helper.input(
+        intensidade = Helpers.input(
             "Insira a intensidade da atividade \nFraco (2)\nIntenso (3)\nVigoroso (4)\n\nInsira o número correspondente: ");
       }
     }
@@ -55,7 +57,7 @@ public class AvFisica extends Atividade {
 
   @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
-    helper.clear();
+    Helpers.clear();
     mostraAtividade();
 
     System.out.println("O que deseja atualizar?");
@@ -68,31 +70,31 @@ public class AvFisica extends Atividade {
     int opcao;
     while (true) {
       try {
-        opcao = Integer.parseInt(helper.input("\nOpção: "));
+        opcao = Integer.parseInt(Helpers.input("\nOpção: "));
         if (opcao < 1 || opcao > 6) {
           throw new Exception();
         }
         break;
       } catch (Exception e) {
-        helper.clear();
+        Helpers.clear();
         System.err.println("Insira uma opção válida");
       }
     }
     switch (opcao) {
       case 1:
-        setDescricao(helper.input("Insira uma nova descrição: "));
+        setDescricao(Helpers.input("Insira uma nova descrição: "));
         break;
       case 2:
-        setData(helper.input("Insira uma nova data (dd/mm/aaaa): "));
+        setData(Helpers.input("Insira uma nova data (dd/mm/aaaa): "));
         break;
       case 3:
-        setDuracao(helper.input("Insira uma nova duração (em minutos): "));
+        setDuracao(Helpers.input("Insira uma nova duração (em minutos): "));
         break;
       case 4:
-        setSatisfacao(helper.input("Insira uma nova satisfação: "));
+        setSatisfacao(Helpers.input("Insira uma nova satisfação: "));
         break;
       case 5:
-        setIntensidade(helper.input("Insira uma nova intensidade: "));
+        setIntensidade(Helpers.input("Insira uma nova intensidade: "));
         break;
       case 6:
         break;

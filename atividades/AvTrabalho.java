@@ -1,5 +1,7 @@
 package atividades;
 
+import lib.Helpers;
+
 public class AvTrabalho extends Atividade {
   private int dificuldade;
 
@@ -37,9 +39,9 @@ public class AvTrabalho extends Atividade {
           throw new Exception();
         }
       } catch (Exception e) {
-        helper.clear();
+        Helpers.clear();
         System.err.println("Insira uma dificuldade válida");
-        dificuldade = helper.input(
+        dificuldade = Helpers.input(
             "Insira a dificuldade da atividade \nFácil (1)\nMédia (2)\nDifícil (3)\n\nInsira o número correspondente: ");
       }
     }
@@ -54,7 +56,7 @@ public class AvTrabalho extends Atividade {
 
   @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
-    helper.clear();
+    Helpers.clear();
     mostraAtividade();
 
     System.out.println("O que deseja atualizar?");
@@ -67,7 +69,7 @@ public class AvTrabalho extends Atividade {
     int opcao;
     while (true) {
       try {
-        opcao = Integer.parseInt(helper.input("\nOpção: "));
+        opcao = Integer.parseInt(Helpers.input("\nOpção: "));
         if (opcao < 1 || opcao > 6) {
           throw new Exception();
         }
@@ -78,19 +80,19 @@ public class AvTrabalho extends Atividade {
     }
     switch (opcao) {
       case 1:
-        setDescricao(helper.input("Insira uma nova descrição: "));
+        setDescricao(Helpers.input("Insira uma nova descrição: "));
         break;
       case 2:
-        setData(helper.input("Insira uma nova data (dd/mm/aaaa): "));
+        setData(Helpers.input("Insira uma nova data (dd/mm/aaaa): "));
         break;
       case 3:
-        setDuracao(helper.input("Insira uma nova duração (em minutos): "));
+        setDuracao(Helpers.input("Insira uma nova duração (em minutos): "));
         break;
       case 4:
-        setSatisfacao(helper.input("Insira uma nova satisfação (0-10): "));
+        setSatisfacao(Helpers.input("Insira uma nova satisfação (0-10): "));
         break;
       case 5:
-        setDificuldade(helper.input("Insira uma nova dificuldade (0-10): "));
+        setDificuldade(Helpers.input("Insira uma nova dificuldade (0-10): "));
         break;
       case 6:
         break;

@@ -6,27 +6,32 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+// Todos os métodos são estáticos, então não é necessário instanciar a classe
 public class Helpers {
-  Scanner sc = new Scanner(System.in);
+  static Scanner sc = new Scanner(System.in);
 
   // Método baseado no input do python, reduzindo as linhas para o print e o
   // nextLine
-  public String input(String titulo) {
+  public static String input(String titulo) {
     System.out.print(titulo);
     return sc.nextLine();
   }
 
   // Método para limpar o terminal do windows
-  public void clear() {
+  public static void clear() {
     try {
-      new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-    } catch (Exception ex) {
-      ex.printStackTrace();
+      if (System.getProperty("os.name").contains("Windows")) {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+      } else {
+        System.out.print("\033\143");
+      }
+    } catch (Exception e) {
+      System.out.println("Erro ao limpar o terminal.\nMensagem de erro: " + e.getMessage());
     }
   }
 
   // Método para validar a data
-  public boolean validaData(String data) {
+  public static boolean validaData(String data) {
     try {
       // Lista com os meses que possuem 31 dias
       List<Integer> mesesTrintaEUm = new ArrayList<Integer>(Arrays.asList(1, 3, 5, 7, 8, 10, 12));
