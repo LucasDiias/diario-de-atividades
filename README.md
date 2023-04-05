@@ -12,13 +12,15 @@ Projeto da disciplina de Programação Orientada a Objetos - 3° Bimestre
 
 - Conseguiu ou não realizar tudo o que foi proposto? Se não conseguiu, detalhe o que
   faltou.
-  Tudo solicitado foi realizado.
+
+  > Tudo solicitado foi realizado.
 
 - Quais os possíveis problemas que se identifica no código?
-  Não conseguimos identificar problemas no código.
+
+  > Não conseguimos identificar problemas no código.
 
 - Sentiu dificuldade para desenvolver o projeto? Quais?
-  Houve a necessidade de pesquisar e entender o HashMap, e, principalmente, desenvolver a parte de resumos e Top3 usando ele. Mas bem tranquilo no geral.
+  > Houve a necessidade de pesquisar e entender o HashMap, e, principalmente, desenvolver a parte de resumos e Top3 usando ele. Mas bem tranquilo no geral.
 
 ## Referências
 
