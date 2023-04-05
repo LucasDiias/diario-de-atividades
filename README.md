@@ -19,7 +19,7 @@ Turma 922A
 
 - Quais os possíveis problemas que se identifica no código?
 
-  > Não conseguimos identificar problemas no código.
+  > Falta da implementação de uma opção de "voltar", o usuário precisa finalizar a operação se quiser navegar por outras opções.
 
 - Sentiu dificuldade para desenvolver o projeto? Quais?
   > Houve a necessidade de pesquisar e entender o HashMap, e, principalmente, desenvolver a parte de resumos e Top3 usando ele. Mas bem tranquilo no geral.
