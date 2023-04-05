@@ -54,9 +54,6 @@ public class ControleAtividades {
         case 3:
           cadastraAvTrabalho();
           break;
-        case 4:
-          mostraMenuPrincipal();
-          break;
       }
     } catch (Exception e) {
       System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
@@ -81,7 +78,7 @@ public class ControleAtividades {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (escolha < 1 && escolha > 3) {
+        if (escolha < 1 || escolha > 3) {
           throw new Exception();
         }
         return escolha;
