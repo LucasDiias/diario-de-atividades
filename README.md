@@ -4,6 +4,7 @@ Projeto da disciplina de Programação Orientada a Objetos - 3° Bimestre
 
 ## Integrantes
 
+Turma 922A
 - Maykon Lucas Ferreira Dias
 - Sofia Pacheco Rizzotto
 - Pedro Affonso Lopes Dias
