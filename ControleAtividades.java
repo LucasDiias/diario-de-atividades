@@ -40,25 +40,31 @@ public class ControleAtividades {
   // CADASTRO ******************************************************************
   // Método de controle para cadastrar nova atividade
   public void cadastro() {
-    // Mostra o menu de cadastro e retorna a opção escolhida
-    int escolha = mostraMenuCadastro();
-    // Verifica a opção escolhida e chama o método de cadastro correspondente
-    try {
-      switch (escolha) {
-        case 1:
-          cadastraAvFisica();
-          break;
-        case 2:
-          cadastraAvLazer();
-          break;
-        case 3:
-          cadastraAvTrabalho();
-          break;
+    boolean varControle = true;
+    while (varControle) {
+      // Mostra o menu de cadastro e retorna a opção escolhida
+      int escolha = mostraMenuCadastro();
+
+      // Verifica a opção escolhida e chama o método de cadastro correspondente
+      try {
+        switch (escolha) {
+          case 1:
+            varControle = !cadastraAvFisica();
+            break;
+          case 2:
+            varControle = !cadastraAvLazer();
+            break;
+          case 3:
+            varControle = !cadastraAvTrabalho();
+            break;
+          case 4:
+            return;
+        }
+      } catch (Exception e) {
+        System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+        Helpers.input("Pressione ENTER para continuar...");
+        return;
       }
-    } catch (Exception e) {
-      System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
-      Helpers.input("Pressione ENTER para continuar...");
-      return;
     }
 
     // Retorna true se a atividade foi cadastrada com sucesso
@@ -71,14 +77,14 @@ public class ControleAtividades {
     Helpers.clear();
     // Mostra o menu
     System.out.println("CADASTRO DE ATIVIDADE\n----------------------------------------------");
-    System.out.println("1- Atividade Física\n2- Atividade de Lazer\n3- Atividade de Trabalho\n");
+    System.out.println("1- Atividade Física\n2- Atividade de Lazer\n3- Atividade de Trabalho\n4- Voltar\n");
 
     // Retorna a opção escolhida
     while (true) {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (escolha < 1 || escolha > 3) {
+        if (escolha < 1 || escolha > 4) {
           throw new Exception();
         }
         return escolha;
@@ -89,99 +95,166 @@ public class ControleAtividades {
   }
 
   // Método para cadastrar uma atividade física
-  public void cadastraAvFisica() {
+  public boolean cadastraAvFisica() {
     Helpers.clear();
     System.out.println("CADASTRO DE ATIVIDADE FÍSICA\n----------------------------------------------");
+    System.out.println("Digite 0 para cancelar o cadastro.");
 
     // Pega os dados da atividade
     String descricao = Helpers.input("\nInsira uma descrição da atividade: ");
+    if (descricao.equals("0")) {
+      return false;
+    }
+
     String duracao = Helpers.input("\nInsira a duração da atividade (em minutos): ");
+    if (duracao.equals("0")) {
+      return false;
+    }
+
     String intensidade = Helpers.input(
         "\nInsira a intensidade da atividade \nFraco (2)\nIntenso (3)\nVigoroso (4)\n\nInsira o número correspondente: ");
+    if (intensidade.equals("0")) {
+      return false;
+    }
+
     String satisfacao = Helpers.input(
         "\nInsira a satisfação com a atividade \nAgradável (1)\nDesagradável (-1)\n\nInsira o número correspondente: ");
+    if (satisfacao.equals("0")) {
+      return false;
+    }
+
     String data = Helpers.input("\nInsira a data da atividade (dd/mm/aaaa): ");
+    if (data.equals("0")) {
+      return false;
+    }
 
     // Cria a atividade
     AvFisica avFisica = new AvFisica(intensidade, duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao ArrayList de atividades
     atividades.add(avFisica);
+    return true;
   }
 
   // Método para cadastrar uma atividade de lazer
-  public void cadastraAvLazer() {
+  public boolean cadastraAvLazer() {
     Helpers.clear();
     System.out.println("CADASTRO DE ATIVIDADE DE LAZER\n----------------------------------------------");
+    System.out.println("Digite 0 para cancelar o cadastro.");
 
     // Pega os dados da atividade
     String descricao = Helpers.input("\nInsira uma descrição da atividade: ");
+    if (descricao.equals("0")) {
+      return false;
+    }
+
     String duracao = Helpers.input("\nInsira a duração da atividade (em minutos): ");
+    if (duracao.equals("0")) {
+      return false;
+    }
+
     String satisfacao = Helpers.input(
         "\nInsira a satisfação com a atividade \nAgradável (1)\nDesagradável (-1)\n\nInsira o número correspondente: ");
+    if (satisfacao.equals("0")) {
+      return false;
+    }
+
     String data = Helpers.input("\nInsira a data da atividade (dd/mm/aaaa): ");
+    if (data.equals("0")) {
+      return false;
+    }
 
     // Cria a atividade
     AvLazer avLazer = new AvLazer(duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao ArrayList de atividades
     atividades.add(avLazer);
+    return true;
   }
 
   // Método para cadastrar uma atividade de trabalho
-  public void cadastraAvTrabalho() {
+  public boolean cadastraAvTrabalho() {
     Helpers.clear();
     System.out.println("CADASTRO DE ATIVIDADE DE TRABALHO\n----------------------------------------------");
+    System.out.println("Digite 0 para cancelar o cadastro.");
 
     // Pega os dados da atividade
     String descricao = Helpers.input("\nInsira uma descrição da atividade: ");
+    if (descricao.equals("0")) {
+      return false;
+    }
+
     String duracao = Helpers.input("\nInsira a duração da atividade (em minutos): ");
+    if (duracao.equals("0")) {
+      return false;
+    }
+
     String satisfacao = Helpers.input(
         "\nInsira a satisfação com a atividade \nAgradável (1)\nDesagradável (-1)\n\nInsira o número correspondente: ");
+    if (satisfacao.equals("0")) {
+      return false;
+    }
+
     String data = Helpers.input("\nInsira a data da atividade (dd/mm/aaaa): ");
+    if (data.equals("0")) {
+      return false;
+    }
+
     String dificuldade = Helpers.input(
         "\nInsira a dificuldade da atividade \nFácil (1)\nMédia (2)\nDifícil (3)\n\nInsira o número correspondente: ");
+    if (dificuldade.equals("0")) {
+      return false;
+    }
 
     // Cria a atividade
     AvTrabalho avTrabalho = new AvTrabalho(dificuldade, duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao ArrayList de atividades
     atividades.add(avTrabalho);
+    return true;
   }
 
   // PESQUISA ******************************************************************
   // Método de controle para pesquisar atividades cadastradas
   public void pesquisar() {
-    int escolha = mostraMenuPesquisa();
-    // Verifica a opção escolhida e chama o método de pesquisa correspondente
-    try {
-      switch (escolha) {
-        case 1:
-          pesquisarPorData();
-          break;
-        case 2:
-          pesquisarPorTipo();
-          break;
-        case 3:
-          pesquisarPorDescricao();
-          break;
+    boolean varControle = true;
+    // Enquanto o usuário não escolher a opção de sair, o menu de pesquisa é
+    while (varControle) {
+      // Mostra o menu de pesquisa
+      int escolha = mostraMenuPesquisa();
+      // Verifica a opção escolhida e chama o método de pesquisa correspondente
+      try {
+        switch (escolha) {
+          case 1:
+            varControle = !pesquisarPorData();
+            break;
+          case 2:
+            varControle = !pesquisarPorTipo();
+            break;
+          case 3:
+            varControle = !pesquisarPorDescricao();
+            break;
+          case 4:
+            return;
+        }
+      } catch (Exception e) {
+        System.err.println("Erro ao pesquisar atividade.\nMensagem de erro: " + e.getMessage());
+        Helpers.input("Pressione ENTER para continuar...");
+        return;
       }
-    } catch (Exception e) {
-      System.err.println("Erro ao pesquisar atividade.\nMensagem de erro: " + e.getMessage());
-      Helpers.input("Pressione ENTER para continuar...");
-      return;
     }
   }
 
   // Método para mostrar o menu de pesquisa
   public int mostraMenuPesquisa() {
     Helpers.clear();
-    System.out.println("O que deseja pesquisar?");
-    System.out.println("1 - Atividades por data");
-    System.out.println("2 - Atividades por tipo");
-    System.out.println("3 - Atividades por descrição");
+    System.out.println("CADASTRO DE ATIVIDADE\n----------------------------------------------");
+    System.out.println("1- Atividades por data");
+    System.out.println("2- Atividades por tipo");
+    System.out.println("3- Atividades por descrição");
+    System.out.println("4- Voltar");
     int opcao;
     while (true) {
       try {
         opcao = Integer.parseInt(Helpers.input("\nInsira o número correspondente à sua escolha: "));
-        if (opcao < 1 || opcao > 3) {
+        if (opcao < 1 || opcao > 4) {
           throw new Exception();
         }
         break;
@@ -193,16 +266,24 @@ public class ControleAtividades {
   }
 
   // Método para pesquisar atividades por data
-  public void pesquisarPorData() {
+  public boolean pesquisarPorData() {
     Helpers.clear();
-    System.out.println("PESQUISA POR DATA\n");
+    System.out.println("PESQUISA POR DATA");
+    System.out.println("Digite 0 para cancelar a pesquisa.\n");
 
     String data = Helpers.input("Insira a data que deseja pesquisar (dd/mm/aaaa): ");
+
+    if (data.equals("0")) {
+      return false;
+    }
 
     // Verifica se a data inserida é válida
     while (!Helpers.validaData(data)) {
       System.err.println("\n\nInsira uma data válida");
       data = Helpers.input("Insira a data que deseja pesquisar (dd/mm/aaaa): ");
+      if (data.equals("0")) {
+        return false;
+      }
     }
 
     // Cria uma lista com as atividades que possuem a data inserida
@@ -227,27 +308,32 @@ public class ControleAtividades {
       }
     }
     Helpers.input("\n\nPressione ENTER para continuar...");
+    return true;
   }
 
   // Método para pesquisar atividades por tipo
-  public void pesquisarPorTipo() {
+  public boolean pesquisarPorTipo() {
     Helpers.clear();
-    System.out.println("PESQUISA POR TIPO\n");
+    System.out.println("PESQUISA POR TIPO");
     int tipo;
 
     while (true) {
       try {
         String entrada = Helpers.input(
-            "Insira o tipo que deseja pesquisar:\n1 - Atividade Física\n2 - Atividade de Lazer\n3 - Atividade de Trabalho\n\nInsira o número correspondente:	");
+            "Insira o tipo que deseja pesquisar:\n1- Atividade Física\n2- Atividade de Lazer\n3- Atividade de Trabalho\n4- Voltar\n\nInsira o número correspondente:	");
         tipo = Integer.parseInt(entrada);
         // Verifica se o tipo inserido é válido
-        if (tipo < 1 || tipo > 3) {
+        if (tipo < 1 || tipo > 4) {
           throw new Exception();
         }
         break;
       } catch (Exception e) {
         System.err.println("\n\nInsira uma opção válida");
       }
+    }
+
+    if (tipo == 4) {
+      return false;
     }
 
     // Cria uma lista com as atividades que possuem o tipo inserido
@@ -272,18 +358,25 @@ public class ControleAtividades {
       }
     }
     Helpers.input("\n\nPressione ENTER para continuar...");
+    return true;
   }
 
   // Método para pesquisar atividades por descrição
-  public void pesquisarPorDescricao() {
+  public boolean pesquisarPorDescricao() {
     Helpers.clear();
-    System.out.println("PESQUISA POR DESCRIÇÃO\n");
+    System.out.println("PESQUISA POR DESCRIÇÃO");
+    System.out.println("Digite 0 para cancelar a pesquisa.\n");
+
     String descricao = Helpers.input("Insira a descrição que deseja pesquisar: ");
 
     // Verifica se a descrição inserida é válida
     while (descricao.equals("")) {
       System.err.println("\n\nInsira uma descrição válida");
       descricao = Helpers.input("Insira a descrição que deseja pesquisar: ");
+    }
+
+    if (descricao.equals("0")) {
+      return false;
     }
 
     // Cria uma lista com as atividades que possuem a descrição inserida
@@ -309,6 +402,7 @@ public class ControleAtividades {
     }
 
     Helpers.input("\n\nPressione ENTER para continuar...");
+    return true;
   }
 
   // ATUALIZAR *****************************************************************
@@ -321,12 +415,13 @@ public class ControleAtividades {
       return;
     }
 
+    System.out.println("\n\nDigite -1 para cancelar a atualização.\n");
     int id;
     // Verifica se o ID inserido é válido
     while (true) {
       try {
         id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
-        if (id >= atividades.size() || id < 0) {
+        if (id >= atividades.size() || id < -1) {
           throw new Exception();
         }
         break;
@@ -334,6 +429,10 @@ public class ControleAtividades {
         System.err.println("\n\nInsira um ID válido");
       }
     }
+    if (id == -1) {
+      return;
+    }
+
     // Chama o método atualizaAtividade da atividade correspondente
     Atividade a = atividades.get(id);
     a.atualizaAtividade();
@@ -349,12 +448,13 @@ public class ControleAtividades {
       return;
     }
 
+    System.out.println("\n\nDigite -1 para cancelar a remoção.\n");
     int id;
     // Verifica se o ID inserido é válido
     while (true) {
       try {
         id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
-        if (id >= atividades.size() || id < 0) {
+        if (id >= atividades.size() || id < -1) {
           throw new Exception();
         }
         break;
@@ -362,6 +462,10 @@ public class ControleAtividades {
         System.err.println("\n\nInsira um ID válido");
       }
     }
+    if (id == -1) {
+      return;
+    }
+
     // Remove a atividade do array de atividades
     atividades.remove(id);
   }
@@ -402,6 +506,8 @@ public class ControleAtividades {
       case 3:
         resumoMes();
         break;
+      case 4:
+        return;
     }
 
     Helpers.input("\n\nPressione ENTER para continuar...");
@@ -412,14 +518,14 @@ public class ControleAtividades {
     Helpers.clear();
     // Mostra o menu
     System.out.println("RESUMO DE ATIVIDADES\n----------------------------------------------");
-    System.out.println("1- Resumo do Dia\n2- Resumo da Semana\n3- Resumo do Mês\n");
+    System.out.println("1- Resumo do Dia\n2- Resumo da Semana\n3- Resumo do Mês\n4- Voltar\n");
 
     // Retorna a opção escolhida
     while (true) {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (escolha < 1 || escolha > 3) {
+        if (escolha < 1 || escolha > 4) {
           throw new Exception();
         }
         return escolha;
