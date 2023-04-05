@@ -123,8 +123,7 @@ public abstract class Atividade {
         this.data = LocalDate.of(ano, mes, dia);
         break;
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma data válida");
+        System.err.println("\n\nInsira uma data válida");
         data = Helpers.input("Insira a data da atividade (dd/mm/aaaa): ");
       }
     }
@@ -143,8 +142,7 @@ public abstract class Atividade {
         this.duracao = duracao;
         break;
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma duração válida");
+        System.err.println("\n\nInsira uma duração válida");
         d = Helpers.input("Insira a duração da atividade (em minutos): ");
       }
     }
@@ -164,8 +162,7 @@ public abstract class Atividade {
           throw new Exception();
         }
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma satisfação válida");
+        System.err.println("\n\nInsira uma satisfação válida");
         satisfacao = Helpers.input(
             "Insira a satisfação da atividade \nInsatisfeito (-1)\nSatisfeito (1)\n\nInsira o número correspondente: ");
       }
@@ -178,14 +175,14 @@ public abstract class Atividade {
     while (true) {
       try {
         // Verifica se a descrição é maior que 0
-        if (descricao.length() == 0) {
+        if (descricao.length() == 0
+            || !descricao.matches("^[\\p{L}\\p{N}\\u00C0-\\u017F]+(\\s+[\\p{L}\\p{N}\\u00C0-\\u017F]+)*$")) {
           throw new Exception();
         }
         this.descricao = descricao;
         break;
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma descrição válida");
+        System.err.println("\n\nInsira uma descrição válida");
         descricao = Helpers.input("Insira uma descrição da atividade: ");
       }
     }
@@ -199,34 +196,34 @@ public abstract class Atividade {
   // MÉTODOS *******************************************************************
 
   // Método abstrato para o cálculo do gasto de energia
-  public abstract double gastoDeEnergia();
+  public abstract double getGastoDeEnergia();
 
   // Método comum para mostrar as informações completas da atividade
   public String mostraAtividade() {
     return String.format(
-        "\nDescrição: %s\nTipo: %s\nData: %s\nDuração: %d minutos\nSatisfação: %s\nGasto de energia: %.2f",
+        "\nDescrição: %s\nTipo: %s\nData: %s\nDuração: %d minutos\nSatisfação: %s\nGasto de energia: %.2f\nBem-estar: %.2f",
         getDescricao(), getTipo(), getData(), getDuracao(), getSatisfacao() == 1 ? "Satisfeito" : "Insatisfeito",
-        gastoDeEnergia());
+        getGastoDeEnergia(), getBemEstar());
   }
 
   // Método comum para atualizar as informações da atividade
   public void atualizaAtividade() {
     Helpers.clear();
     // Mostra as informações da atividade que será atualizada
-    mostraAtividade();
+    System.out.println(mostraAtividade());
 
-    System.out.println("O que deseja atualizar?");
+    System.out.println("\nO que deseja atualizar?");
     System.out.println("1 - Descrição");
     System.out.println("2 - Data");
     System.out.println("3 - Duração");
     System.out.println("4 - Satisfação");
-    System.out.println("5 - Voltar");
+
     int opcao;
     // Loop para verificar se a opção está no formato correto e se é válida
     while (true) {
       try {
         opcao = Integer.parseInt(Helpers.input("\nOpção: "));
-        if (opcao < 1 || opcao > 5) {
+        if (opcao < 1 || opcao > 4) {
           throw new Exception();
         }
         break;
@@ -248,14 +245,11 @@ public abstract class Atividade {
       case 4:
         setSatisfacao(Helpers.input("Insira uma nova satisfação: "));
         break;
-      case 5:
-        break;
     }
-    ;
   }
 
   // Retorna o gasto de energia da atividade
-  public double bemEstar() {
-    return gastoDeEnergia() * satisfacao / 360;
+  public double getBemEstar() {
+    return getGastoDeEnergia() * satisfacao / 360;
   }
 }

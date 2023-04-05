@@ -16,7 +16,7 @@ public class AvLazer extends Atividade {
 
   // MÉTODOS *******************************************************************
   // Implementação do método gastoDeEnergia da classe AvLazer
-  public double gastoDeEnergia() {
-    return duracao;
+  public double getGastoDeEnergia() {
+    return duracao * 1;
   }
 }

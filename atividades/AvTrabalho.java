@@ -39,8 +39,7 @@ public class AvTrabalho extends Atividade {
           throw new Exception();
         }
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma dificuldade válida");
+        System.err.println("\n\nInsira uma dificuldade válida");
         dificuldade = Helpers.input(
             "Insira a dificuldade da atividade \nFácil (1)\nMédia (2)\nDifícil (3)\n\nInsira o número correspondente: ");
       }
@@ -57,20 +56,20 @@ public class AvTrabalho extends Atividade {
   @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
     Helpers.clear();
-    mostraAtividade();
+    // Mostra as informações da atividade que será atualizada
+    System.out.println(mostraAtividade());
 
-    System.out.println("O que deseja atualizar?");
+    System.out.println("\nO que deseja atualizar?");
     System.out.println("1 - Descrição");
     System.out.println("2 - Data");
     System.out.println("3 - Duração");
     System.out.println("4 - Satisfação");
     System.out.println("5 - Dificuldade");
-    System.out.println("6 - Voltar");
     int opcao;
     while (true) {
       try {
-        opcao = Integer.parseInt(Helpers.input("\nOpção: "));
-        if (opcao < 1 || opcao > 6) {
+        opcao = Integer.parseInt(Helpers.input("\nInsira o número correspondente: "));
+        if (opcao < 1 || opcao > 5) {
           throw new Exception();
         }
         break;
@@ -94,16 +93,11 @@ public class AvTrabalho extends Atividade {
       case 5:
         setDificuldade(Helpers.input("Insira uma nova dificuldade (0-10): "));
         break;
-      case 6:
-        break;
-      default:
-        System.err.println("Opção inválida");
-        atualizaAtividade();
     }
   }
 
   // Implementação do método gastoDeEnergia da classe AvTrabalho
-  public double gastoDeEnergia() {
+  public double getGastoDeEnergia() {
     return duracao * dificuldade * 2;
   }
 }

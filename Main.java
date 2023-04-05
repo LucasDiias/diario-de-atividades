@@ -1,7 +1,9 @@
+import lib.Helpers;
+
 public class Main {
   public static void main(String[] args) {
     // Instancia o controle de atividades
-    ControleDeAtividades controle = new ControleDeAtividades();
+    ControleAtividades controle = new ControleAtividades();
 
     // Loop para mostrar o menu principal
     boolean varControle = true;
@@ -11,27 +13,31 @@ public class Main {
       // Switch para escolher a opção do menu
       switch (escolha) {
         case 1:
-          varControle = controle.cadastro();
+          controle.cadastro();
           break;
         case 2:
-          varControle = controle.pesquisar();
+          controle.pesquisar();
           break;
         case 3:
-          varControle = controle.atualizar();
+          controle.atualizar();
           break;
         case 4:
-          varControle = controle.remover();
+          controle.remover();
           break;
         case 5:
-          varControle = controle.listarAtividades();
+          controle.listarAtividades();
+          Helpers.input("\n\nPressione ENTER para continuar...");
           break;
         case 6:
-          varControle = controle.resumo();
+          controle.resumo();
           break;
         case 7:
-          varControle = controle.testar();
+          controle.top3Energia();
           break;
         case 8:
+          controle.testar();
+          break;
+        case 9:
           varControle = false;
           break;
       }

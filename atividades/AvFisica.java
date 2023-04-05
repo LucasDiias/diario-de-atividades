@@ -58,26 +58,27 @@ public class AvFisica extends Atividade {
   @Override // Override do método atualizaAtividade da classe Atividade
   public void atualizaAtividade() {
     Helpers.clear();
-    mostraAtividade();
+    // Mostra as informações da atividade que será atualizada
+    System.out.println(mostraAtividade());
 
-    System.out.println("O que deseja atualizar?");
+    System.out.println("\nO que deseja atualizar?");
     System.out.println("1 - Descrição");
     System.out.println("2 - Data");
     System.out.println("3 - Duração");
     System.out.println("4 - Satisfação");
     System.out.println("5 - Intensidade");
-    System.out.println("6 - Voltar");
+
     int opcao;
+    // Loop para verificar se a opção está no formato correto
     while (true) {
       try {
-        opcao = Integer.parseInt(Helpers.input("\nOpção: "));
-        if (opcao < 1 || opcao > 6) {
+        opcao = Integer.parseInt(Helpers.input("\nInsira o número correspondente: "));
+        if (opcao < 1 || opcao > 5) {
           throw new Exception();
         }
         break;
       } catch (Exception e) {
-        Helpers.clear();
-        System.err.println("Insira uma opção válida");
+        System.err.println("\nInsira uma opção válida");
       }
     }
     switch (opcao) {
@@ -96,17 +97,11 @@ public class AvFisica extends Atividade {
       case 5:
         setIntensidade(Helpers.input("Insira uma nova intensidade: "));
         break;
-      case 6:
-        break;
-      default:
-        System.out.println("Opção inválida");
-        atualizaAtividade();
     }
-    ;
   }
 
   // Implementação do método gastoDeEnergia da classe AvFisica
-  public double gastoDeEnergia() {
+  public double getGastoDeEnergia() {
     return duracao * intensidade * 3;
   }
 }
