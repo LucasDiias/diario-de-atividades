@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import lib.Helpers;
 
-public class ControleDeAtividades {
+public class ControleAtividades {
   List<Atividade> atividades = new ArrayList<Atividade>();
 
   // Método para mostrar o Menu Principal
@@ -32,7 +32,6 @@ public class ControleDeAtividades {
         }
         return escolha;
       } catch (Exception e) {
-        Helpers.clear();
         System.err.println("\nInsira um valor válido");
       }
     }
@@ -40,43 +39,39 @@ public class ControleDeAtividades {
 
   // CADASTRO ******************************************************************
   // Método de controle para cadastrar nova atividade
-  public boolean cadastro() {
+  public void cadastro() {
     // Mostra o menu de cadastro e retorna a opção escolhida
     int escolha = mostraMenuCadastro();
-    boolean retorno = false;
     // Verifica a opção escolhida e chama o método de cadastro correspondente
     try {
       switch (escolha) {
         case 1:
           cadastraAvFisica();
-          retorno = true;
           break;
         case 2:
           cadastraAvLazer();
-          retorno = true;
           break;
         case 3:
           cadastraAvTrabalho();
-          retorno = true;
+          break;
+        case 4:
+          mostraMenuPrincipal();
           break;
       }
     } catch (Exception e) {
-      retorno = false;
+      System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return;
     }
 
     // Retorna true se a atividade foi cadastrada com sucesso
     System.out.println("\n\nAtividade cadastrada com sucesso!");
     Helpers.input("Pressione ENTER para continuar...");
-
-    return retorno;
   }
 
   // Método para mostrar o menu de cadastro
   public int mostraMenuCadastro() {
     Helpers.clear();
-    // Cria um ArrayList com as opções do menu
-    List<Integer> opcoes = new ArrayList<Integer>(Arrays.asList(1, 2, 3));
-
     // Mostra o menu
     System.out.println("CADASTRO DE ATIVIDADE\n----------------------------------------------");
     System.out.println("1- Atividade Física\n2- Atividade de Lazer\n3- Atividade de Trabalho\n");
@@ -86,7 +81,7 @@ public class ControleDeAtividades {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (!opcoes.contains(escolha)) {
+        if (escolha < 1 && escolha > 3) {
           throw new Exception();
         }
         return escolha;
@@ -157,21 +152,26 @@ public class ControleDeAtividades {
 
   // PESQUISA ******************************************************************
   // Método de controle para pesquisar atividades cadastradas
-  public boolean pesquisar() {
+  public void pesquisar() {
     int escolha = mostraMenuPesquisa();
     // Verifica a opção escolhida e chama o método de pesquisa correspondente
-    switch (escolha) {
-      case 1:
-        pesquisarPorData();
-        break;
-      case 2:
-        pesquisarPorTipo();
-        break;
-      case 3:
-        pesquisarPorDescricao();
-        break;
+    try {
+      switch (escolha) {
+        case 1:
+          pesquisarPorData();
+          break;
+        case 2:
+          pesquisarPorTipo();
+          break;
+        case 3:
+          pesquisarPorDescricao();
+          break;
+      }
+    } catch (Exception e) {
+      System.err.println("Erro ao pesquisar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return;
     }
-    return true;
   }
 
   // Método para mostrar o menu de pesquisa
@@ -321,7 +321,7 @@ public class ControleDeAtividades {
 
   // ATUALIZAR *****************************************************************
   // Método para atualizar atividade existente
-  public boolean atualizar() {
+  public void atualizar() {
     Helpers.clear();
     // Mostra as atividades cadastradas
     listarAtividades();
@@ -332,15 +332,12 @@ public class ControleDeAtividades {
       if (id < atividades.size()) {
         break;
       } else {
-        Helpers.clear();
-        System.err.println("ID inválido");
+        System.err.println("\nID inválido");
       }
     }
     // Chama o método atualizaAtividade da atividade correspondente
     Atividade a = atividades.get(id);
     a.atualizaAtividade();
-    // Retorna true se a atividade foi atualizada com sucesso
-    return true;
   }
 
   // REMOVER *******************************************************************
@@ -413,9 +410,6 @@ public class ControleDeAtividades {
   // Método para mostrar o menu de resumo
   public int mostraMenuResumo() {
     Helpers.clear();
-    // Cria um ArrayList com as opções do menu
-    List<Integer> opcoes = new ArrayList<Integer>(Arrays.asList(1, 2, 3));
-
     // Mostra o menu
     System.out.println("RESUMO DE ATIVIDADES\n----------------------------------------------");
     System.out.println("1- Resumo do Dia\n2- Resumo da Semana\n3- Resumo do Mês\n");
@@ -425,7 +419,7 @@ public class ControleDeAtividades {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (!opcoes.contains(escolha)) {
+        if (escolha < 1 || escolha > 3) {
           throw new Exception();
         }
         return escolha;
