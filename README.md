@@ -8,7 +8,8 @@ Turma 922A
 
 - Maykon Lucas Ferreira Dias
 - Sofia Pacheco Rizzotto
-- Pedro Affonso Lopes Dias
+- Paulo Henrique de Oliveira
+- William Gustavo Lins Gomes
 
 ## Perguntas
 
@@ -41,3 +42,5 @@ Turma 922A
 - [Java String toUpperCase() Method](https://www.w3schools.com/java/ref_string_touppercase.asp)
 
 - [Check if a string contains only alphanumeric characters in Java](https://www.techiedelight.com/pt/check-string-contains-alphanumeric-characters-java/)
+
+- [Bancos de Dados e JDBC](https://www.alura.com.br/apostila-java-web/bancos-de-dados-e-jdbc)
