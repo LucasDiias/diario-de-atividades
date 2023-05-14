@@ -2,6 +2,7 @@ import atividades.Atividade;
 import atividades.AvFisica;
 import atividades.AvLazer;
 import atividades.AvTrabalho;
+import dao.AtividadeDAO;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ import java.util.HashMap;
 import lib.Helpers;
 
 public class ControleAtividades {
-  List<Atividade> atividades = new ArrayList<Atividade>();
+  // List<Atividade> atividades = new ArrayList<Atividade>();
+  AtividadeDAO dao = new AtividadeDAO();
 
   // Método para mostrar o Menu Principal
   public int mostraMenuPrincipal() {
@@ -20,14 +22,14 @@ public class ControleAtividades {
     // Mostra o menu
     System.out.println("DIÁRIO DE ATIVIDADES\n----------------------------------------------");
     System.out.println(
-        "1- Cadastrar Atividade\n2- Pesquisar Atividade\n3- Atualizar Atividade\n4- Remover Atividade\n5- Listar Atividades\n6- Apresentar Resumos\n7- Top 3 Energia\n8- Testar Programa\n9- Sair\n");
+        "1- Cadastrar Atividade\n2- Pesquisar Atividade\n3- Atualizar Atividade\n4- Remover Atividade\n5- Listar Atividades\n6- Apresentar Resumos\n7- Top 3 Energia\n8- Sair\n");
 
     // Retorna a opção escolhida
     while (true) {
       try {
         int escolha = Integer.parseInt(Helpers.input("Insira o número correspondente à sua escolha: "));
         // Verifica se a opção escolhida é válida
-        if (escolha < 1 || escolha > 9) {
+        if (escolha < 1 || escolha > 8) {
           throw new Exception();
         }
         return escolha;
@@ -61,7 +63,7 @@ public class ControleAtividades {
             return;
         }
       } catch (Exception e) {
-        System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+        System.err.println("\nErro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
         Helpers.input("Pressione ENTER para continuar...");
         return;
       }
@@ -130,8 +132,8 @@ public class ControleAtividades {
 
     // Cria a atividade
     AvFisica avFisica = new AvFisica(intensidade, duracao, satisfacao, descricao, data);
-    // Adiciona a atividade ao ArrayList de atividades
-    atividades.add(avFisica);
+    // Adiciona a atividade ao banco de dados
+    dao.add(avFisica);
     return true;
   }
 
@@ -165,8 +167,8 @@ public class ControleAtividades {
 
     // Cria a atividade
     AvLazer avLazer = new AvLazer(duracao, satisfacao, descricao, data);
-    // Adiciona a atividade ao ArrayList de atividades
-    atividades.add(avLazer);
+    // Adiciona a atividade ao banco de dados
+    dao.add(avLazer);
     return true;
   }
 
@@ -206,8 +208,8 @@ public class ControleAtividades {
 
     // Cria a atividade
     AvTrabalho avTrabalho = new AvTrabalho(dificuldade, duracao, satisfacao, descricao, data);
-    // Adiciona a atividade ao ArrayList de atividades
-    atividades.add(avTrabalho);
+    // Adiciona a atividade ao banco de dados
+    dao.add(avTrabalho);
     return true;
   }
 
@@ -286,27 +288,15 @@ public class ControleAtividades {
       }
     }
 
-    // Cria uma lista com as atividades que possuem a data inserida
-    List<Atividade> atividadesMostrar = new ArrayList<Atividade>();
-
-    // Adiciona as atividades que possuem a data inserida na lista
-    for (Atividade atividade : atividades) {
-      if (atividade.getData().equals(data)) {
-        atividadesMostrar.add(atividade);
+    List<Atividade> atividades = dao.pesquisa(1, data);
+    if (atividades.size() == 0) {
+      System.out.println("\n\nNenhuma atividade encontrada");
+    } else {
+      for (Atividade av : atividades) {
+        System.out.println(av.mostraAtividade());
       }
     }
 
-    // Verifica se a lista está vazia
-    if (atividadesMostrar.isEmpty()) {
-      Helpers.clear();
-      System.out.println("Não foram encontradas atividades para a data inserida.");
-    } else { // Mostra as atividades encontradas
-      Helpers.clear();
-      System.out.println("Atividades na data " + data + ":");
-      for (Atividade a : atividadesMostrar) {
-        System.out.println("\n\nID: " + atividades.indexOf(a) + a.mostraAtividade());
-      }
-    }
     Helpers.input("\n\nPressione ENTER para continuar...");
     return true;
   }
@@ -336,27 +326,15 @@ public class ControleAtividades {
       return false;
     }
 
-    // Cria uma lista com as atividades que possuem o tipo inserido
-    List<Atividade> atividadesMostrar = new ArrayList<Atividade>();
-
-    // Adiciona as atividades que possuem o tipo inserido na lista
-    for (Atividade atividade : atividades) {
-      if (atividade.getTipoInt() == tipo) {
-        atividadesMostrar.add(atividade);
+    List<Atividade> atividades = dao.pesquisa(2, tipo + "");
+    if (atividades.size() == 0) {
+      System.out.println("\n\nNenhuma atividade encontrada");
+    } else {
+      for (Atividade av : atividades) {
+        System.out.println(av.mostraAtividade());
       }
     }
 
-    // Verifica se a lista está vazia
-    if (atividadesMostrar.size() == 0) {
-      Helpers.clear();
-      System.out.println("Não foram encontradas atividades para o tipo inserido.");
-    } else { // Se não estiver vazia, mostra as atividades
-      Helpers.clear();
-      System.out.println("Atividades do tipo " + atividadesMostrar.get(0).getTipo() + ":");
-      for (Atividade a : atividadesMostrar) {
-        System.out.println("\n\nID: " + atividades.indexOf(a) + a.mostraAtividade());
-      }
-    }
     Helpers.input("\n\nPressione ENTER para continuar...");
     return true;
   }
@@ -379,25 +357,12 @@ public class ControleAtividades {
       return false;
     }
 
-    // Cria uma lista com as atividades que possuem a descrição inserida
-    List<Atividade> atividadesMostrar = new ArrayList<Atividade>();
-
-    // Adiciona as atividades que possuem a descrição inserida na lista
-    for (Atividade atividade : atividades) {
-      if (atividade.getDescricao().toUpperCase().equals(descricao.toUpperCase())) {
-        atividadesMostrar.add(atividade);
-      }
-    }
-
-    // Verifica se a lista está vazia
-    if (atividadesMostrar.size() == 0) {
-      Helpers.clear();
-      System.out.println("Não foram encontradas atividades para a descrição inserida.");
-    } else { // Se não estiver vazia, mostra as atividades
-      Helpers.clear();
-      System.out.println("Atividades com a descrição " + descricao + ":");
-      for (Atividade a : atividadesMostrar) {
-        System.out.println("\n\nID: " + atividades.indexOf(a) + a.mostraAtividade());
+    List<Atividade> atividades = dao.pesquisa(3, descricao);
+    if (atividades.size() == 0) {
+      System.out.println("\n\nNenhuma atividade encontrada");
+    } else {
+      for (Atividade av : atividades) {
+        System.out.println(av.mostraAtividade());
       }
     }
 
@@ -415,13 +380,13 @@ public class ControleAtividades {
       return;
     }
 
-    System.out.println("\n\nDigite -1 para cancelar a atualização.\n");
+    System.out.println("\n\nDigite 0 para cancelar a atualização.\n");
     int id;
     // Verifica se o ID inserido é válido
     while (true) {
       try {
         id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
-        if (id >= atividades.size() || id < -1) {
+        if (id >= dao.getAllAtividades().size() || id < 0) {
           throw new Exception();
         }
         break;
@@ -429,12 +394,12 @@ public class ControleAtividades {
         System.err.println("\n\nInsira um ID válido");
       }
     }
-    if (id == -1) {
+    if (id == 0) {
       return;
     }
 
     // Chama o método atualizaAtividade da atividade correspondente
-    Atividade a = atividades.get(id);
+    Atividade a = dao.getAllAtividades().get(id - 1);
     a.atualizaAtividade();
   }
 
@@ -448,13 +413,13 @@ public class ControleAtividades {
       return;
     }
 
-    System.out.println("\n\nDigite -1 para cancelar a remoção.\n");
+    System.out.println("\n\nDigite 0 para cancelar a remoção.\n");
     int id;
     // Verifica se o ID inserido é válido
     while (true) {
       try {
         id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
-        if (id >= atividades.size() || id < -1) {
+        if (!dao.getIds().contains(id) && id != 0) {
           throw new Exception();
         }
         break;
@@ -462,12 +427,12 @@ public class ControleAtividades {
         System.err.println("\n\nInsira um ID válido");
       }
     }
-    if (id == -1) {
+    if (id == 0) {
       return;
     }
 
     // Remove a atividade do array de atividades
-    atividades.remove(id);
+    dao.delete(id);
   }
 
   // LISTAR ********************************************************************
@@ -476,7 +441,7 @@ public class ControleAtividades {
     Helpers.clear();
 
     // Verifica se há atividades cadastradas
-    if (atividades.size() <= 0) {
+    if (dao.getAllAtividades().size() <= 0) {
       System.out.println("Não há atividades cadastradas");
       return false;
     }
@@ -484,8 +449,8 @@ public class ControleAtividades {
     System.out.println("ATIVIDADES CADASTRADAS");
 
     // Mostra as atividades cadastradas
-    for (Atividade a : atividades) {
-      System.out.println("\n\nID: " + atividades.indexOf(a) + a.mostraAtividade());
+    for (Atividade a : dao.getAllAtividades()) {
+      System.out.println(a.mostraAtividade());
     }
     return true;
   }
@@ -542,7 +507,7 @@ public class ControleAtividades {
     HashMap<Integer, ArrayList<Atividade>> dias = new HashMap<Integer, ArrayList<Atividade>>();
 
     // Adiciona as atividades ao HashMap
-    for (Atividade a : atividades) {
+    for (Atividade a : dao.getAllAtividades()) {
       if (!dias.containsKey(a.getDia())) {
         dias.put(a.getDia(), new ArrayList<Atividade>(Arrays.asList(a)));
       } else {
@@ -575,7 +540,7 @@ public class ControleAtividades {
       for (Atividade a : atividadesDoDia) {
         totalEnergia += a.getGastoDeEnergia();
         totalBemEstar += a.getBemEstar();
-        System.out.println(a.mostraAtividade());
+        System.out.println("\n" + a.mostraAtividade());
       }
       // Mostra os totais do dia
       System.out.println(String.format("\nTotal de gasto de energia: %.2f", totalEnergia));
@@ -590,7 +555,7 @@ public class ControleAtividades {
     List<Integer> semanas = new ArrayList<Integer>();
 
     // Adiciona as semanas ao ArrayList
-    for (Atividade a : atividades) {
+    for (Atividade a : dao.getAllAtividades()) {
       if (!semanas.contains(a.getSemana())) {
         semanas.add(a.getSemana());
       }
@@ -614,7 +579,7 @@ public class ControleAtividades {
 
       System.out.println("\n\nSemana " + semana);
       // Mostra as atividades da semana
-      for (Atividade a : atividades) {
+      for (Atividade a : dao.getAllAtividades()) {
         if (a.getSemana() == semana) {
           totalEnergia += a.getGastoDeEnergia();
           totalBemEstar += a.getBemEstar();
@@ -635,7 +600,7 @@ public class ControleAtividades {
     List<String> meses = new ArrayList<String>();
 
     // Adiciona os meses ao ArrayList
-    for (Atividade a : atividades) {
+    for (Atividade a : dao.getAllAtividades()) {
       if (!meses.contains(a.getMes())) {
         meses.add(a.getMes());
       }
@@ -659,7 +624,7 @@ public class ControleAtividades {
 
       System.out.println("\n\n" + mes);
       // Mostra as atividades do mês
-      for (Atividade a : atividades) {
+      for (Atividade a : dao.getAllAtividades()) {
         if (a.getMes() == mes) {
           totalEnergia += a.getGastoDeEnergia();
           totalBemEstar += a.getBemEstar();
@@ -681,7 +646,7 @@ public class ControleAtividades {
     HashMap<Double, ArrayList<Atividade>> gastos = new HashMap<Double, ArrayList<Atividade>>();
 
     // Adiciona as atividades ao HashMap
-    for (Atividade a : atividades) {
+    for (Atividade a : dao.getAllAtividades()) {
       if (!gastos.containsKey(a.getGastoDeEnergia())) {
         gastos.put(a.getGastoDeEnergia(), new ArrayList<Atividade>(Arrays.asList(a)));
       } else {
@@ -725,32 +690,6 @@ public class ControleAtividades {
       }
     }
 
-    Helpers.input("\n\nPressione ENTER para continuar...");
-  }
-
-  // TESTAR ********************************************************************
-  // Método para adicionar atividades de teste
-  public void testar() {
-    Helpers.clear();
-
-    // Adiciona 9 atividades de teste
-    try {
-      atividades.add(new AvFisica("2", "30", "1", "Corrida", "10/10/2023"));
-      atividades.add(new AvFisica("3", "30", "-1", "Caminhada", "10/10/2023"));
-      atividades.add(new AvFisica("4", "30", "1", "Paintball", "12/10/2023"));
-      atividades.add(new AvLazer("30", "-1", "Praia", "11/07/2023"));
-      atividades.add(new AvLazer("30", "1", "Cinema", "11/07/2023"));
-      atividades.add(new AvLazer("30", "-1", "Parque", "13/07/2023"));
-      atividades.add(new AvTrabalho("1", "30", "1", "Projeto", "07/01/2023"));
-      atividades.add(new AvTrabalho("2", "30", "-1", "Estágio", "08/01/2023"));
-      atividades.add(new AvTrabalho("3", "30", "1", "Trabalho", "07/01/2023"));
-    } catch (Exception e) {
-      System.err.println("Erro ao adicionar atividades de teste");
-      return;
-    }
-
-    // Retorna true se as atividades foram adicionadas com sucesso
-    System.out.println("Atividades de teste cadastradas com sucesso!");
     Helpers.input("\n\nPressione ENTER para continuar...");
   }
 }

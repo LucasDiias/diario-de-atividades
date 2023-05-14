@@ -3,21 +3,29 @@ package atividades;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import dao.AtividadeDAO;
 import lib.Helpers;
 
 public abstract class Atividade {
   // Declaração de atributos comuns à todas as atividades
+  protected int id;
   protected int duracao;
   protected int satisfacao;
   protected String descricao;
   protected LocalDate data;
   protected int tipo;
 
+  protected AtividadeDAO dao = new AtividadeDAO();
+
   // GETTERS *******************************************************************
   public String getData() {
     // Formata a data para o padrão dd/mm/aaaa e retorna como String
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     return this.data.format(formato);
+  }
+
+  public LocalDate getDataSQL() {
+    return this.data;
   }
 
   public int getDuracao() {
@@ -102,6 +110,10 @@ public abstract class Atividade {
     return this.tipo;
   }
 
+  public int getId() {
+    return this.id;
+  }
+
   // SETTERS *******************************************************************
   // Lógica de tratamento do set de Data
   public void setData(String data) {
@@ -113,14 +125,8 @@ public abstract class Atividade {
           throw new Exception();
         }
 
-        // Separa a data em dia, mês e ano
-        String[] dataSplit = data.split("/");
-        int dia = Integer.parseInt(dataSplit[0]);
-        int mes = Integer.parseInt(dataSplit[1]);
-        int ano = Integer.parseInt(dataSplit[2]);
-
         // Transforma a data em um objeto LocalDate
-        this.data = LocalDate.of(ano, mes, dia);
+        this.data = Helpers.stringToDate(data);
         break;
       } catch (Exception e) {
         System.err.println("\n\nInsira uma data válida");
@@ -175,8 +181,7 @@ public abstract class Atividade {
     while (true) {
       try {
         // Verifica se a descrição é maior que 0
-        if (descricao.length() == 0
-            || !descricao.matches("^[\\p{L}\\p{N}\\u00C0-\\u017F]+(\\s+[\\p{L}\\p{N}\\u00C0-\\u017F]+)*$")) {
+        if (descricao.length() == 0 || !descricao.matches("^[A-Za-z]+$")) {
           throw new Exception();
         }
         this.descricao = descricao;
@@ -193,6 +198,10 @@ public abstract class Atividade {
     this.tipo = tipo;
   }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
   // MÉTODOS *******************************************************************
 
   // Método abstrato para o cálculo do gasto de energia
@@ -201,8 +210,9 @@ public abstract class Atividade {
   // Método comum para mostrar as informações completas da atividade
   public String mostraAtividade() {
     return String.format(
-        "\nDescrição: %s\nTipo: %s\nData: %s\nDuração: %d minutos\nSatisfação: %s\nGasto de energia: %.2f\nBem-estar: %.2f",
-        getDescricao(), getTipo(), getData(), getDuracao(), getSatisfacao() == 1 ? "Satisfeito" : "Insatisfeito",
+        "\nID: %d\nDescrição: %s\nTipo: %s\nData: %s\nDuração: %d minutos\nSatisfação: %s\nGasto de energia: %.2f\nBem-estar: %.2f",
+        getId(), getDescricao(), getTipo(), getData(), getDuracao(),
+        getSatisfacao() == 1 ? "Satisfeito" : "Insatisfeito",
         getGastoDeEnergia(), getBemEstar());
   }
 
@@ -235,15 +245,19 @@ public abstract class Atividade {
     switch (opcao) {
       case 1:
         setDescricao(Helpers.input("Insira uma nova descrição: "));
+        dao.update(getId(), 3, getDescricao());
         break;
       case 2:
         setData(Helpers.input("Insira uma nova data (dd/mm/aaaa): "));
+        dao.update(getId(), 4, getData());
         break;
       case 3:
         setDuracao(Helpers.input("Insira uma nova duração (em minutos): "));
+        dao.update(getId(), 1, getDuracao() + "");
         break;
       case 4:
-        setSatisfacao(Helpers.input("Insira uma nova satisfação: "));
+        setSatisfacao(Helpers.input("Insira uma nova satisfação (1 ou -1): "));
+        dao.update(getId(), 2, getSatisfacao() + "");
         break;
     }
   }

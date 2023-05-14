@@ -35,9 +35,6 @@ public class Main {
           controle.top3Energia();
           break;
         case 8:
-          controle.testar();
-          break;
-        case 9:
           varControle = false;
           break;
       }

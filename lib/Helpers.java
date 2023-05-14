@@ -3,6 +3,7 @@ package lib;
 import java.util.Scanner;
 
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -58,5 +59,13 @@ public class Helpers {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  public static LocalDate stringToDate(String data) {
+    String[] dataSplit = data.split("/");
+    int dia = Integer.parseInt(dataSplit[0]);
+    int mes = Integer.parseInt(dataSplit[1]);
+    int ano = Integer.parseInt(dataSplit[2]);
+    return LocalDate.of(ano, mes, dia);
   }
 }

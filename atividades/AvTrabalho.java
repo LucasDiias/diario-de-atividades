@@ -1,5 +1,7 @@
 package atividades;
 
+import java.time.LocalDate;
+
 import lib.Helpers;
 
 public class AvTrabalho extends Atividade {
@@ -13,6 +15,21 @@ public class AvTrabalho extends Atividade {
       setSatisfacao(satisfacao);
       setDescricao(descricao);
       setData(data);
+      setTipo(3);
+    } catch (Exception e) {
+      System.err.println("Erro ao criar atividade de trabalho.");
+    }
+  }
+
+  // Construtor de retorno do SQL
+  public AvTrabalho(int id, int dificuldade, int duracao, int satisfacao, String descricao, LocalDate data) {
+    try {
+      this.id = id;
+      this.dificuldade = dificuldade;
+      this.duracao = duracao;
+      this.satisfacao = satisfacao;
+      this.descricao = descricao;
+      this.data = data;
       setTipo(3);
     } catch (Exception e) {
       System.err.println("Erro ao criar atividade de trabalho.");
@@ -80,18 +97,23 @@ public class AvTrabalho extends Atividade {
     switch (opcao) {
       case 1:
         setDescricao(Helpers.input("Insira uma nova descrição: "));
+        dao.update(getId(), 3, getDescricao());
         break;
       case 2:
         setData(Helpers.input("Insira uma nova data (dd/mm/aaaa): "));
+        dao.update(getId(), 4, getData());
         break;
       case 3:
         setDuracao(Helpers.input("Insira uma nova duração (em minutos): "));
+        dao.update(getId(), 1, getDuracao() + "");
         break;
       case 4:
-        setSatisfacao(Helpers.input("Insira uma nova satisfação (0-10): "));
+        setSatisfacao(Helpers.input("Insira uma nova satisfação (1 ou -1): "));
+        dao.update(getId(), 2, getSatisfacao() + "");
         break;
       case 5:
-        setDificuldade(Helpers.input("Insira uma nova dificuldade (0-10): "));
+        setDificuldade(Helpers.input("Insira uma nova dificuldade (1, 2 ou 3): "));
+        dao.update(getId(), 6, getDificuldade() + "");
         break;
     }
   }
