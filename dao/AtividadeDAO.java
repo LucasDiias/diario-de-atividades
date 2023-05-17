@@ -224,7 +224,6 @@ public class AtividadeDAO {
       ids.add(rs.getInt("id"));
     }
 
-    System.out.println(ids.toString());
     return ids;
   }
 }

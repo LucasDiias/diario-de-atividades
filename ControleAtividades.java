@@ -438,7 +438,7 @@ public class ControleAtividades {
         }
         break;
       } catch (Exception e) {
-        System.err.println("\n\nInsira um ID válido");
+        System.err.println("\n\nInsira um ID válido (0 para cancelar)");
       }
     }
     if (id == 0) {
@@ -479,11 +479,11 @@ public class ControleAtividades {
       try {
         id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
         if (!dao.getIds().contains(id) && id != 0) {
-          throw new Exception("ID não encontrado");
+          throw new Exception();
         }
         break;
       } catch (Exception e) {
-        System.err.println("\n\nInsira um ID válido");
+        System.err.println("\n\nInsira um ID válido (0 para cancelar)");
       }
     }
     if (id == 0) {
