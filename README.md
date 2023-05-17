@@ -20,7 +20,7 @@ Turma 922A
 
 - Quais os possíveis problemas que se identifica no código?
 
-  > Teclas ou combinações de teclas (ex.: Ctrl + C) no terminal podem parar a execução do código.
+  > Teclas ou combinações de teclas (ex.: Ctrl + C) no terminal podem parar a execução do código. Palavras acentuadas não estão sendo aceitas na descrição da atividade.
 
 - Sentiu dificuldade para desenvolver o projeto? Quais?
   > Houve a necessidade de pesquisar e entender o HashMap, e, principalmente, desenvolver a parte de resumos e Top3 usando ele. Mas bem tranquilo no geral.
