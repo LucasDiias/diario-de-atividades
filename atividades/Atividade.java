@@ -249,19 +249,35 @@ public abstract class Atividade {
     switch (opcao) {
       case 1:
         setDescricao(Helpers.input("Insira uma nova descrição: "));
-        dao.update(getId(), 3, getDescricao());
+        try {
+          dao.update(getId(), 3, getDescricao());
+        } catch (Exception e) {
+          System.err.println("Erro ao atualizar a descrição: " + e.getMessage() + "\n");
+        }
         break;
       case 2:
         setData(Helpers.input("Insira uma nova data (dd/mm/aaaa): "));
-        dao.update(getId(), 4, getData());
+        try {
+          dao.update(getId(), 4, getData());
+        } catch (Exception e) {
+          System.err.println("Erro ao atualizar a data: " + e.getMessage() + "\n");
+        }
         break;
       case 3:
         setDuracao(Helpers.input("Insira uma nova duração (em minutos): "));
-        dao.update(getId(), 1, getDuracao() + "");
+        try {
+          dao.update(getId(), 1, getDuracao() + "");
+        } catch (Exception e) {
+          System.err.println("Erro ao atualizar a duração: " + e.getMessage() + "\n");
+        }
         break;
       case 4:
         setSatisfacao(Helpers.input("Insira uma nova satisfação (1 ou -1): "));
-        dao.update(getId(), 2, getSatisfacao() + "");
+        try {
+          dao.update(getId(), 2, getSatisfacao() + "");
+        } catch (Exception e) {
+          System.err.println("Erro ao atualizar a satisfação: " + e.getMessage() + "\n");
+        }
         break;
     }
   }

@@ -25,7 +25,11 @@ public class Main {
           controle.remover();
           break;
         case 5:
-          controle.listarAtividades();
+          try {
+            controle.listarAtividades();
+          } catch (Exception e) {
+            System.err.println("Erro ao listar atividades: " + e.getMessage());
+          }
           Helpers.input("\n\nPressione ENTER para continuar...");
           break;
         case 6:

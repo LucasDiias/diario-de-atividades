@@ -20,38 +20,43 @@ public class AtividadeDAO {
 
   public AtividadeDAO() {
     // Utiliza a ConnectionFactory para estabelecer uma conexão com o banco
-    this.connection = ConnectionFactory.getConnection();
-  }
-
-  // Cadastro de atividades no banco
-  public void add(Atividade av) {
-    String sql = "INSERT INTO atividades (tipo, duracao, satisfacao, descricao, data, intensidade, dificuldade) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-      stmt.setInt(1, av.getTipoInt());
-      stmt.setInt(2, av.getDuracao());
-      stmt.setInt(3, av.getSatisfacao());
-      stmt.setString(4, av.getDescricao());
-      stmt.setDate(5, java.sql.Date.valueOf(av.getDataSQL()));
-      // Define os valores de intensidade e dificuldade como nulos inicialmente
-      stmt.setNull(6, java.sql.Types.INTEGER);
-      stmt.setNull(7, java.sql.Types.INTEGER);
-
-      // Verifica o tipo da atividade para inserir os valores corretos
-      if (av instanceof AvFisica) {
-        stmt.setInt(6, ((AvFisica) av).getIntensidade());
-      } else if (av instanceof AvTrabalho) {
-        stmt.setInt(7, ((AvTrabalho) av).getDificuldade());
-      }
-
-      stmt.executeUpdate();
+    try {
+      this.connection = ConnectionFactory.getConnection();
     } catch (SQLException e) {
-      System.out.println(e);
+      System.out.println("Erro ao conectar com o banco de dados.\nMensagem de erro: " + e.getMessage() + "\n");
+      System.out
+          .println("Verifique se o banco de dados está rodando e se o usuário e senha estão corretos e reinicie.\n");
+      Helpers.input("Pressione ENTER para continuar...");
+      System.exit(1);
     }
   }
 
+  // Cadastro de atividades no banco
+  public void add(Atividade av) throws SQLException {
+    String sql = "INSERT INTO atividades (tipo, duracao, satisfacao, descricao, data, intensidade, dificuldade) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+
+    stmt.setInt(1, av.getTipoInt());
+    stmt.setInt(2, av.getDuracao());
+    stmt.setInt(3, av.getSatisfacao());
+    stmt.setString(4, av.getDescricao());
+    stmt.setDate(5, java.sql.Date.valueOf(av.getDataSQL()));
+    // Define os valores de intensidade e dificuldade como nulos inicialmente
+    stmt.setNull(6, java.sql.Types.INTEGER);
+    stmt.setNull(7, java.sql.Types.INTEGER);
+
+    // Verifica o tipo da atividade para inserir os valores corretos
+    if (av instanceof AvFisica) {
+      stmt.setInt(6, ((AvFisica) av).getIntensidade());
+    } else if (av instanceof AvTrabalho) {
+      stmt.setInt(7, ((AvTrabalho) av).getDificuldade());
+    }
+
+    stmt.executeUpdate();
+  }
+
   // Pesquisa de atividades no banco
-  public List<Atividade> pesquisa(int tipo, String param) {
+  public List<Atividade> pesquisa(int tipo, String param) throws SQLException {
     List<Atividade> avs = new ArrayList<Atividade>();
 
     // Verifica o tipo da pesquisa onde:
@@ -60,40 +65,33 @@ public class AtividadeDAO {
     // 3 - Pesquisa por descrição
     if (tipo == 1) {
       String sql = "SELECT * FROM atividades WHERE data = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(param)));
-        ResultSet rs = stmt.executeQuery();
+      stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(param)));
+      ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-          avs.add(geraAtividade(rs));
-        }
-      } catch (SQLException e) {
-        System.out.println(e);
+      while (rs.next()) {
+        avs.add(geraAtividade(rs));
       }
     } else if (tipo == 2) {
       String sql = "SELECT * FROM atividades WHERE tipo = ?";
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setInt(1, Integer.parseInt(param));
-        ResultSet rs = stmt.executeQuery();
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-        while (rs.next()) {
-          avs.add(geraAtividade(rs));
-        }
-      } catch (SQLException e) {
-        System.out.println(e);
+      stmt.setInt(1, Integer.parseInt(param));
+      ResultSet rs = stmt.executeQuery();
+
+      while (rs.next()) {
+        avs.add(geraAtividade(rs));
       }
     } else {
       String sql = "SELECT * FROM atividades WHERE descricao LIKE ?";
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setString(1, "%" + param + "%");
-        ResultSet rs = stmt.executeQuery();
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-        while (rs.next()) {
-          avs.add(geraAtividade(rs));
-        }
-      } catch (SQLException e) {
-        System.out.println(e);
+      stmt.setString(1, "%" + param + "%");
+      ResultSet rs = stmt.executeQuery();
+
+      while (rs.next()) {
+        avs.add(geraAtividade(rs));
       }
     }
 
@@ -125,117 +123,108 @@ public class AtividadeDAO {
   }
 
   // Retorna todas as atividades do banco
-  public List<Atividade> getAllAtividades() {
+  public List<Atividade> getAllAtividades() throws SQLException {
     List<Atividade> avs = new ArrayList<Atividade>();
 
     String sql = "SELECT * FROM atividades";
+    PreparedStatement stmt = connection.prepareStatement(sql);
 
-    try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-      ResultSet rs = stmt.executeQuery();
+    ResultSet rs = stmt.executeQuery();
 
-      while (rs.next()) {
-        avs.add(geraAtividade(rs));
-      }
-    } catch (SQLException e) {
-      System.out.println(e);
+    while (rs.next()) {
+      avs.add(geraAtividade(rs));
     }
 
     return avs;
   }
 
   // Atualiza a coluna especificada de uma atividade no banco
-  public void update(int id, int col, String valor) {
+  public void update(int id, int col, String valor) throws SQLException {
     if (col == 1) {
       String sql = "UPDATE atividades SET duracao = ? WHERE id = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setInt(1, Integer.parseInt(valor));
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      stmt.setInt(1, Integer.parseInt(valor));
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+
     } else if (col == 2) {
       String sql = "UPDATE atividades SET satisfacao = ? WHERE id = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setInt(1, Integer.parseInt(valor));
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      stmt.setInt(1, Integer.parseInt(valor));
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+
     } else if (col == 3) {
       String sql = "UPDATE atividades SET descricao = ? WHERE id = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setString(1, valor);
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      stmt.setString(1, valor);
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+
     } else if (col == 4) {
       String sql = "UPDATE atividades SET data = ? WHERE id = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(valor)));
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(valor)));
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+
     } else if (col == 5) {
       String sql = "UPDATE atividades SET intensidade = ? WHERE id = ?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
 
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setInt(1, Integer.parseInt(valor));
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      stmt.setInt(1, Integer.parseInt(valor));
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
+
     } else if (col == 6) {
       String sql = "UPDATE atividades SET dificuldade = ? WHERE id = ?";
-
-      try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setInt(1, Integer.parseInt(valor));
-        stmt.setInt(2, id);
-        stmt.executeUpdate();
-      } catch (SQLException e) {
-        System.out.println(e);
-      }
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, Integer.parseInt(valor));
+      stmt.setInt(2, id);
+      stmt.executeUpdate();
     }
   }
 
   // Deleta uma atividade do banco
-  public void delete(int id) {
+  public void delete(int id) throws SQLException {
     String sql = "DELETE FROM atividades WHERE id = ?";
+    PreparedStatement stmt = connection.prepareStatement(sql);
 
-    try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-    } catch (SQLException e) {
-      System.out.println(e);
+    stmt.setInt(1, id);
+    stmt.executeUpdate();
+  }
+
+  public Atividade getAtividade(int id) throws SQLException {
+    String sql = "SELECT * FROM atividades WHERE id = ?";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+
+    stmt.setInt(1, id);
+    ResultSet rs = stmt.executeQuery();
+
+    if (rs.next()) {
+      return geraAtividade(rs);
     }
+
+    return null;
   }
 
   // Retorna uma lista com os ids de todas as atividades
-  public List<Integer> getIds() {
+  public List<Integer> getIds() throws SQLException {
     List<Integer> ids = new ArrayList<Integer>();
 
     String sql = "SELECT id FROM atividades";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    ResultSet rs = stmt.executeQuery();
 
-    try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-      ResultSet rs = stmt.executeQuery();
-
-      while (rs.next()) {
-        ids.add(rs.getInt("id"));
-      }
-    } catch (SQLException e) {
-      System.out.println(e);
+    while (rs.next()) {
+      ids.add(rs.getInt("id"));
     }
 
+    System.out.println(ids.toString());
     return ids;
   }
 }

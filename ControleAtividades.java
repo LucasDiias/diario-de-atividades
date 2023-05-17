@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.sql.SQLException;
 
 import lib.Helpers;
 
@@ -133,7 +134,13 @@ public class ControleAtividades {
     // Cria a atividade
     AvFisica avFisica = new AvFisica(intensidade, duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao banco de dados
-    dao.add(avFisica);
+    try {
+      dao.add(avFisica);
+    } catch (Exception e) {
+      System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
     return true;
   }
 
@@ -168,7 +175,13 @@ public class ControleAtividades {
     // Cria a atividade
     AvLazer avLazer = new AvLazer(duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao banco de dados
-    dao.add(avLazer);
+    try {
+      dao.add(avLazer);
+    } catch (Exception e) {
+      System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
     return true;
   }
 
@@ -209,7 +222,13 @@ public class ControleAtividades {
     // Cria a atividade
     AvTrabalho avTrabalho = new AvTrabalho(dificuldade, duracao, satisfacao, descricao, data);
     // Adiciona a atividade ao banco de dados
-    dao.add(avTrabalho);
+    try {
+      dao.add(avTrabalho);
+    } catch (Exception e) {
+      System.err.println("Erro ao cadastrar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
     return true;
   }
 
@@ -288,7 +307,14 @@ public class ControleAtividades {
       }
     }
 
-    List<Atividade> atividades = dao.pesquisa(1, data);
+    List<Atividade> atividades = new ArrayList<Atividade>();
+    try {
+      atividades = dao.pesquisa(1, data);
+    } catch (Exception e) {
+      System.err.println("Erro ao pesquisar atividade no banco.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
     if (atividades.size() == 0) {
       System.out.println("\n\nNenhuma atividade encontrada");
     } else {
@@ -326,7 +352,15 @@ public class ControleAtividades {
       return false;
     }
 
-    List<Atividade> atividades = dao.pesquisa(2, tipo + "");
+    List<Atividade> atividades = new ArrayList<Atividade>();
+    try {
+      atividades = dao.pesquisa(2, tipo + "");
+    } catch (Exception e) {
+      System.err.println("Erro ao pesquisar atividade no banco.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
+
     if (atividades.size() == 0) {
       System.out.println("\n\nNenhuma atividade encontrada");
     } else {
@@ -357,7 +391,14 @@ public class ControleAtividades {
       return false;
     }
 
-    List<Atividade> atividades = dao.pesquisa(3, descricao);
+    List<Atividade> atividades = new ArrayList<Atividade>();
+    try {
+      atividades = dao.pesquisa(3, descricao);
+    } catch (Exception e) {
+      System.err.println("Erro ao pesquisar atividade no banco.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return false;
+    }
     if (atividades.size() == 0) {
       System.out.println("\n\nNenhuma atividade encontrada");
     } else {
@@ -375,45 +416,18 @@ public class ControleAtividades {
   public void atualizar() {
     Helpers.clear();
     // Mostra as atividades cadastradas
-    if (!listarAtividades()) {
+    try {
+      if (!listarAtividades()) {
+        Helpers.input("\n\nPressione ENTER para continuar...");
+        return;
+      }
+    } catch (Exception e) {
+      System.err.println("Erro ao listar atividades.\nMensagem de erro: " + e.getMessage());
       Helpers.input("\n\nPressione ENTER para continuar...");
       return;
     }
 
     System.out.println("\n\nDigite 0 para cancelar a atualização.\n");
-    int id;
-    // Verifica se o ID inserido é válido
-    while (true) {
-      try {
-        id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
-        if (id >= dao.getAllAtividades().size() || id < 0) {
-          throw new Exception();
-        }
-        break;
-      } catch (Exception e) {
-        System.err.println("\n\nInsira um ID válido");
-      }
-    }
-    if (id == 0) {
-      return;
-    }
-
-    // Chama o método atualizaAtividade da atividade correspondente
-    Atividade a = dao.getAllAtividades().get(id - 1);
-    a.atualizaAtividade();
-  }
-
-  // REMOVER *******************************************************************
-  // Método para remover atividade existente
-  public void remover() {
-    Helpers.clear();
-    // Mostra as atividades cadastradas
-    if (!listarAtividades()) {
-      Helpers.input("\n\nPressione ENTER para continuar...");
-      return;
-    }
-
-    System.out.println("\n\nDigite 0 para cancelar a remoção.\n");
     int id;
     // Verifica se o ID inserido é válido
     while (true) {
@@ -431,13 +445,64 @@ public class ControleAtividades {
       return;
     }
 
+    // Chama o método atualizaAtividade da atividade correspondente
+    try {
+      Atividade a = dao.getAtividade(id);
+      a.atualizaAtividade();
+    } catch (Exception e) {
+      System.err.println("Erro ao atualizar atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return;
+    }
+  }
+
+  // REMOVER *******************************************************************
+  // Método para remover atividade existente
+  public void remover() {
+    Helpers.clear();
+    // Mostra as atividades cadastradas
+    try {
+      if (!listarAtividades()) {
+        Helpers.input("\n\nPressione ENTER para continuar...");
+        return;
+      }
+    } catch (Exception e) {
+      System.err.println("Erro ao listar atividades.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("\n\nPressione ENTER para continuar...");
+      return;
+    }
+
+    System.out.println("\n\nDigite 0 para cancelar a remoção.\n");
+    int id;
+    // Verifica se o ID inserido é válido
+    while (true) {
+      try {
+        id = Integer.parseInt(Helpers.input("Insira o ID da atividade que deseja atualizar: "));
+        if (!dao.getIds().contains(id) && id != 0) {
+          throw new Exception("ID não encontrado");
+        }
+        break;
+      } catch (Exception e) {
+        System.err.println("\n\nInsira um ID válido");
+      }
+    }
+    if (id == 0) {
+      return;
+    }
+
     // Remove a atividade do array de atividades
-    dao.delete(id);
+    try {
+      dao.delete(id);
+    } catch (Exception e) {
+      System.err.println("Erro ao remover atividade.\nMensagem de erro: " + e.getMessage());
+      Helpers.input("Pressione ENTER para continuar...");
+      return;
+    }
   }
 
   // LISTAR ********************************************************************
   // Método para listar as atividades cadastradas
-  public boolean listarAtividades() {
+  public boolean listarAtividades() throws SQLException {
     Helpers.clear();
 
     // Verifica se há atividades cadastradas
@@ -507,12 +572,18 @@ public class ControleAtividades {
     HashMap<Integer, ArrayList<Atividade>> dias = new HashMap<Integer, ArrayList<Atividade>>();
 
     // Adiciona as atividades ao HashMap
-    for (Atividade a : dao.getAllAtividades()) {
-      if (!dias.containsKey(a.getDia())) {
-        dias.put(a.getDia(), new ArrayList<Atividade>(Arrays.asList(a)));
-      } else {
-        dias.get(a.getDia()).add(a);
+    try {
+      for (Atividade a : dao.getAllAtividades()) {
+        if (!dias.containsKey(a.getDia())) {
+          dias.put(a.getDia(), new ArrayList<Atividade>(Arrays.asList(a)));
+        } else {
+          dias.get(a.getDia()).add(a);
+        }
       }
+    } catch (Exception e) {
+      System.err.println("Erro ao adicionar atividades ao HashMap: " + e.getMessage());
+      Helpers.input("\n\nPressione ENTER para continuar...");
+      return;
     }
 
     // Verifica se há atividades cadastradas
@@ -555,10 +626,16 @@ public class ControleAtividades {
     List<Integer> semanas = new ArrayList<Integer>();
 
     // Adiciona as semanas ao ArrayList
-    for (Atividade a : dao.getAllAtividades()) {
-      if (!semanas.contains(a.getSemana())) {
-        semanas.add(a.getSemana());
+    try {
+      for (Atividade a : dao.getAllAtividades()) {
+        if (!semanas.contains(a.getSemana())) {
+          semanas.add(a.getSemana());
+        }
       }
+    } catch (Exception e) {
+      System.err.println("Erro ao adicionar semanas ao ArrayList: " + e.getMessage());
+      Helpers.input("\n\nPressione ENTER para continuar...");
+      return;
     }
 
     // Verifica se há atividades cadastradas
@@ -579,12 +656,18 @@ public class ControleAtividades {
 
       System.out.println("\n\nSemana " + semana);
       // Mostra as atividades da semana
-      for (Atividade a : dao.getAllAtividades()) {
-        if (a.getSemana() == semana) {
-          totalEnergia += a.getGastoDeEnergia();
-          totalBemEstar += a.getBemEstar();
-          System.out.println(a.mostraAtividade());
+      try {
+        for (Atividade a : dao.getAllAtividades()) {
+          if (a.getSemana() == semana) {
+            totalEnergia += a.getGastoDeEnergia();
+            totalBemEstar += a.getBemEstar();
+            System.out.println(a.mostraAtividade());
+          }
         }
+      } catch (Exception e) {
+        System.err.println("Erro ao mostrar atividades da semana: " + e.getMessage());
+        Helpers.input("\n\nPressione ENTER para continuar...");
+        return;
       }
 
       // Mostra os totais da semana
@@ -600,10 +683,16 @@ public class ControleAtividades {
     List<String> meses = new ArrayList<String>();
 
     // Adiciona os meses ao ArrayList
-    for (Atividade a : dao.getAllAtividades()) {
-      if (!meses.contains(a.getMes())) {
-        meses.add(a.getMes());
+    try {
+      for (Atividade a : dao.getAllAtividades()) {
+        if (!meses.contains(a.getMes())) {
+          meses.add(a.getMes());
+        }
       }
+    } catch (Exception e) {
+      System.err.println("Erro ao adicionar meses ao ArrayList: " + e.getMessage());
+      Helpers.input("\n\nPressione ENTER para continuar...");
+      return;
     }
 
     // Verifica se há atividades cadastradas
@@ -624,12 +713,18 @@ public class ControleAtividades {
 
       System.out.println("\n\n" + mes);
       // Mostra as atividades do mês
-      for (Atividade a : dao.getAllAtividades()) {
-        if (a.getMes() == mes) {
-          totalEnergia += a.getGastoDeEnergia();
-          totalBemEstar += a.getBemEstar();
-          System.out.println(a.mostraAtividade());
+      try {
+        for (Atividade a : dao.getAllAtividades()) {
+          if (a.getMes() == mes) {
+            totalEnergia += a.getGastoDeEnergia();
+            totalBemEstar += a.getBemEstar();
+            System.out.println(a.mostraAtividade());
+          }
         }
+      } catch (Exception e) {
+        System.err.println("Erro ao mostrar atividades do mês: " + e.getMessage());
+        Helpers.input("\n\nPressione ENTER para continuar...");
+        return;
       }
 
       // Mostra os totais do mês
@@ -646,12 +741,18 @@ public class ControleAtividades {
     HashMap<Double, ArrayList<Atividade>> gastos = new HashMap<Double, ArrayList<Atividade>>();
 
     // Adiciona as atividades ao HashMap
-    for (Atividade a : dao.getAllAtividades()) {
-      if (!gastos.containsKey(a.getGastoDeEnergia())) {
-        gastos.put(a.getGastoDeEnergia(), new ArrayList<Atividade>(Arrays.asList(a)));
-      } else {
-        gastos.get(a.getGastoDeEnergia()).add(a);
+    try {
+      for (Atividade a : dao.getAllAtividades()) {
+        if (!gastos.containsKey(a.getGastoDeEnergia())) {
+          gastos.put(a.getGastoDeEnergia(), new ArrayList<Atividade>(Arrays.asList(a)));
+        } else {
+          gastos.get(a.getGastoDeEnergia()).add(a);
+        }
       }
+    } catch (Exception e) {
+      System.err.println("Erro ao adicionar atividades ao HashMap: " + e.getMessage());
+      Helpers.input("\n\nPressione ENTER para continuar...");
+      return;
     }
 
     // Verifica se há atividades cadastradas
