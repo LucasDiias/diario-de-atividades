@@ -185,7 +185,7 @@ public abstract class Atividade {
     while (true) {
       try {
         // Verifica se a descrição é maior que 0
-        if (descricao.length() == 0 || !descricao.matches("^[A-Za-z]+$")) {
+        if (descricao.length() == 0 || !descricao.matches("^[A-Za-z\s]+$")) {
           throw new Exception();
         }
         this.descricao = descricao;
