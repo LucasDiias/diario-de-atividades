@@ -24,18 +24,22 @@ public abstract class Atividade {
     return this.data.format(formato);
   }
 
+  // Retorna a data como LocalDate
   public LocalDate getDataSQL() {
     return this.data;
   }
 
+  // Retorna a duração da atividade
   public int getDuracao() {
     return this.duracao;
   }
 
+  // Retorna a satisfação da atividade
   public int getSatisfacao() {
     return this.satisfacao;
   }
 
+  // Retorna a descrição da atividade
   public String getDescricao() {
     return this.descricao;
   }
@@ -126,7 +130,7 @@ public abstract class Atividade {
         }
 
         // Transforma a data em um objeto LocalDate
-        this.data = Helpers.stringToDate(data);
+        this.data = Helpers.stringToLocalDate(data);
         break;
       } catch (Exception e) {
         System.err.println("\n\nInsira uma data válida");

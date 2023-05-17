@@ -61,7 +61,8 @@ public class Helpers {
     }
   }
 
-  public static LocalDate stringToDate(String data) {
+  // Converte uma string para um objeto LocalDate
+  public static LocalDate stringToLocalDate(String data) {
     String[] dataSplit = data.split("/");
     int dia = Integer.parseInt(dataSplit[0]);
     int mes = Integer.parseInt(dataSplit[1]);

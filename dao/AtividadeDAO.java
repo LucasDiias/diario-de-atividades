@@ -2,23 +2,24 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 import atividades.Atividade;
 import atividades.AvFisica;
 import atividades.AvLazer;
 import atividades.AvTrabalho;
-import lib.Helpers;
 import lib.db.ConnectionFactory;
+import lib.Helpers;
 
 public class AtividadeDAO {
   private Connection connection;
 
   public AtividadeDAO() {
+    // Utiliza a ConnectionFactory para estabelecer uma conexão com o banco
     this.connection = ConnectionFactory.getConnection();
   }
 
@@ -32,9 +33,11 @@ public class AtividadeDAO {
       stmt.setInt(3, av.getSatisfacao());
       stmt.setString(4, av.getDescricao());
       stmt.setDate(5, java.sql.Date.valueOf(av.getDataSQL()));
+      // Define os valores de intensidade e dificuldade como nulos inicialmente
       stmt.setNull(6, java.sql.Types.INTEGER);
       stmt.setNull(7, java.sql.Types.INTEGER);
 
+      // Verifica o tipo da atividade para inserir os valores corretos
       if (av instanceof AvFisica) {
         stmt.setInt(6, ((AvFisica) av).getIntensidade());
       } else if (av instanceof AvTrabalho) {
@@ -47,14 +50,19 @@ public class AtividadeDAO {
     }
   }
 
+  // Pesquisa de atividades no banco
   public List<Atividade> pesquisa(int tipo, String param) {
     List<Atividade> avs = new ArrayList<Atividade>();
 
+    // Verifica o tipo da pesquisa onde:
+    // 1 - Pesquisa por data
+    // 2 - Pesquisa por tipo
+    // 3 - Pesquisa por descrição
     if (tipo == 1) {
       String sql = "SELECT * FROM atividades WHERE data = ?";
 
       try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToDate(param)));
+        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(param)));
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
@@ -92,6 +100,7 @@ public class AtividadeDAO {
     return avs;
   }
 
+  // Método para gerar uma atividade a partir de um ResultSet
   private Atividade geraAtividade(ResultSet rs) throws SQLException {
     int tipo = rs.getInt("tipo");
     int id = rs.getInt("id");
@@ -101,6 +110,7 @@ public class AtividadeDAO {
     LocalDate data = rs.getDate("data").toLocalDate();
 
     Atividade av;
+    // Verifica o tipo da atividade para instanciar o objeto correto
     if (tipo == 1) {
       int intensidade = rs.getInt("intensidade");
       av = new AvFisica(id, intensidade, duracao, satisfacao, descricao, data);
@@ -114,6 +124,7 @@ public class AtividadeDAO {
     return av;
   }
 
+  // Retorna todas as atividades do banco
   public List<Atividade> getAllAtividades() {
     List<Atividade> avs = new ArrayList<Atividade>();
 
@@ -132,6 +143,7 @@ public class AtividadeDAO {
     return avs;
   }
 
+  // Atualiza a coluna especificada de uma atividade no banco
   public void update(int id, int col, String valor) {
     if (col == 1) {
       String sql = "UPDATE atividades SET duracao = ? WHERE id = ?";
@@ -167,7 +179,7 @@ public class AtividadeDAO {
       String sql = "UPDATE atividades SET data = ? WHERE id = ?";
 
       try (PreparedStatement stmt = connection.prepareStatement(sql);) {
-        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToDate(valor)));
+        stmt.setDate(1, java.sql.Date.valueOf(Helpers.stringToLocalDate(valor)));
         stmt.setInt(2, id);
         stmt.executeUpdate();
       } catch (SQLException e) {
@@ -196,6 +208,7 @@ public class AtividadeDAO {
     }
   }
 
+  // Deleta uma atividade do banco
   public void delete(int id) {
     String sql = "DELETE FROM atividades WHERE id = ?";
 
@@ -207,6 +220,7 @@ public class AtividadeDAO {
     }
   }
 
+  // Retorna uma lista com os ids de todas as atividades
   public List<Integer> getIds() {
     List<Integer> ids = new ArrayList<Integer>();
 
